@@ -1,0 +1,21 @@
+services:
+  db:
+    image: percona:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "my-sample-pass"
+      MYSQL_DATABASE: "test-db"
+  load-balancer:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+
+  application:
+    image: nginx:latest
+    deploy:
+      replicas: 2
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    expose:
+      - "80"
